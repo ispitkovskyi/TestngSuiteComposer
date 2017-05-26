@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+
+<suite name="CreateComponentProcessWorkflowSmokeSuite" verbose="10" parallel="false" annotations="JDK">
+    <parameter name="globalName" value="GLOBAL NAME"/>
+    <parameter name="globalDescription" value="GLOBAL DESCRIPTION"/>
+
+<!-- SIMPLE COMPONENT CREATION -->
+    <test name="Create Component (File System Basic)">
+        <classes>
+            <class name="tests.ComponentTest">
+                <methods>
+                    <parameter name="name" value="___createComponentWorkflow-Comp1_{{timestamp}}"/>
+                    <parameter name="description" value="SDA Automation"/>
+                    <include name="createFileSystemBasicComponent"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+</suite>

@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+
+<suite name="addEnvironmentToApplication" verbose="10" parallel="false" annotations="JDK">
+
+    <test name="Create Application">
+        <parameter name="name" value="addEnvironmentToApplication-App1_{{timestamp}}"/>
+        <parameter name="description" value="SDA Automation"/>
+        <classes>
+            <class name="tests.ApplicationTest">
+                <methods>
+                    <include name="createApplication"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Validate Application">
+        <parameter name="name" value="addEnvironmentToApplication-App1_{{timestamp}}"/>
+        <parameter name="description" value="SDA Automation"/>
+        <parameter name="pipeline" value="null"/>
+        <parameter name="notificationScheme" value="null"/>
+        <parameter name="enforceCompleteSnapshots" value="false"/>
+        <parameter name="active" value="true"/>
+        <classes>
+            <class name="tests.ApplicationTest">
+                <methods>
+                    <include name="assertApplicationCreated"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Create Global Environment 1">
+        <parameter name="name" value="addEnvironmentToApplication-GlobalEnv1_{{timestamp}}"/>
+        <parameter name="description" value="SDA Automation"/>
+        <parameter name="color" value="#8f0c4b"/>
+	<parameter name="exportable" value="false"/>
+        <classes>
+            <class name="tests.GlobalEnvironmentTest">
+                <methods>
+                    <include name="createGlobalEnv"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Validate Global Environment 1">
+        <parameter name="name" value="addEnvironmentToApplication-GlobalEnv1_{{timestamp}}"/>
+        <parameter name="description" value="SDA Automation"/>
+        <parameter name="color" value="#8f0c4b"/>
+	<parameter name="exportable" value="false"/>
+        <parameter name="active" value="true"/>
+        <classes>
+            <class name="tests.GlobalEnvironmentTest">
+                <methods>
+                    <include name="assertGlobalEnvironmentCreated"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Create Global Environment 2">
+        <parameter name="name" value="addEnvironmentToApplication-GlobalEnv2_{{timestamp}}"/>
+        <parameter name="description" value="SDA Automation"/>
+        <classes>
+            <class name="tests.GlobalEnvironmentTest">
+                <methods>
+                    <include name="createGlobalEnv"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Validate Global Environment 2">
+        <parameter name="name" value="addEnvironmentToApplication-GlobalEnv2_{{timestamp}}"/>
+        <parameter name="description" value="SDA Automation"/>
+        <parameter name="active" value="true"/>
+        <classes>
+            <class name="tests.GlobalEnvironmentTest">
+                <methods>
+                    <include name="assertGlobalEnvironmentCreated"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Add Environment 1 to Application">
+        <parameter name="appName" value="addEnvironmentToApplication-App1_{{timestamp}}"/>
+        <parameter name="envName" value="addEnvironmentToApplication-GlobalEnv1_{{timestamp}}"/>
+        <classes>
+            <class name="tests.EnvironmentTest">
+                <methods>
+                    <include name="addEnvironmentToApplication"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Validate Environment 1 added to Application">
+        <parameter name="appName" value="addEnvironmentToApplication-App1_{{timestamp}}"/>
+        <parameter name="environments" value="addEnvironmentToApplication-GlobalEnv1_{{timestamp}}"/>
+        <parameter name="itemsCount" value="1"/>
+        <classes>
+            <class name="tests.EnvironmentTest">
+                <methods>
+                    <include name="assertEnvironmentsAddedToApplication"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Add Environment 2 to Application">
+        <parameter name="appName" value="addEnvironmentToApplication-App1_{{timestamp}}"/>
+        <parameter name="envName" value="addEnvironmentToApplication-GlobalEnv2_{{timestamp}}"/>
+        <parameter name="requireApprovals" value="true"/>
+        <parameter name="lockSnapshots" value="true"/>
+        <parameter name="inheritSystemCleanup" value="false"/>
+        <parameter name="cleanupDaysToKeep" value="-1"/>
+        <parameter name="cleanupCountToKeep" value="-1"/>
+        <classes>
+            <class name="tests.EnvironmentTest">
+                <methods>
+                    <include name="addEnvironmentToApplication"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Validate Environment 2 added to Application">
+        <parameter name="appName" value="addEnvironmentToApplication-App1_{{timestamp}}"/>
+        <parameter name="environments"
+                   value="addEnvironmentToApplication-GlobalEnv1_{{timestamp}};addEnvironmentToApplication-GlobalEnv2_{{timestamp}}"/>
+        <parameter name="itemsCount" value="2"/>
+        <classes>
+            <class name="tests.EnvironmentTest">
+                <methods>
+                    <include name="assertEnvironmentsAddedToApplication"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+</suite>

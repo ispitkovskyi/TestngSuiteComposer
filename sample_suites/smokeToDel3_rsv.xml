@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<suite name="CreateComponentProcessWorkflowSmokeSuite" verbose="10" parallel="false" annotations="JDK">
+    <parameter name="GLOBAL_PARAM" value="GLOBAL NAME"/>
+    <test name="Create Component (File System Basic)">
+        <parameter name="TEST_PARAM" value="TEST NAME"/>
+        <classes>
+            <class name="tests.ComponentTest">
+                <methods>
+                    <parameter name="METHODS_PARAM" value="METHODS NAME"/>
+                    <include name="createFileSystemBasicComponent"/>
+                </methods>
+            </class>
+            <parameter name="CLASSES_PARAM" value="CLASSES NAME"/>
+        </classes>
+    </test>
+</suite>

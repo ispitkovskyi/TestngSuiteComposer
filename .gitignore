@@ -1,0 +1,13 @@
+.idea
+*.iml
+*.ipr
+target/*
+working_dir/*
+surfire-reports
+/.project
+/.settings
+/.classpath
+allure-results
+test-output
+*.zip
+*.log

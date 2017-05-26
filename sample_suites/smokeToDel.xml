@@ -1,0 +1,575 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+
+<suite name="CreateComponentProcessWorkflowSmokeSuite" verbose="10" parallel="false" annotations="JDK">
+    <parameter name="globalName" value="GLOBAL NAME"/>
+    <parameter name="globalDescription" value="GLOBAL DESCRIPTION"/>
+
+<!-- SIMPLE COMPONENT CREATION -->
+    <test name="Create Component (File System Basic)">
+        <parameter name="test_name" value="createComponentWorkflow-Comp1_{{timestamp}}"/>
+        <parameter name="test_description" value="SDA Automation"/>
+        <classes>
+            <parameter name="classes_name" value="createComponentWorkflow-Comp1_{{timestamp}}"/>
+            <parameter name="classes_description" value="SDA Automation"/>
+            <class name="tests.ComponentTest">
+                <methods>
+                    <parameter name="methods_name" value="createComponentWorkflow-Comp1_{{timestamp}}"/>
+                    <parameter name="methods_description" value="SDA Automation"/>
+                    <include name="createFileSystemBasicComponent"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+	<!-- CRATE COMPONENT PROCESS  (Deploy type) -->
+	<test verbose="1" name="Create Component Process (Deploy-type)" annotations="JDK">
+        <parameter name="component" value="createComponentWorkflow-Comp1_{{timestamp}}"/>
+        <parameter name="name" value="Comp1_ProcessDeploy_{{timestamp}}"/>
+        <parameter name="processType" value="Deployment"/>
+		<parameter name="defaultWorkingDir" value="${p:resource/work.dir}/${p:component.name}"/>
+        <classes>
+            <class name="tests.ComponentTest">
+                <methods>
+                    <include name="createComponentProcess"/>
+                </methods>
+            </class>
+        </classes>
+    </test>	
+<!--
+	HINTS
+	1. If you don't want to VERIFY some parameter, skip it in list of parameters OR just set its value to null. Like:
+		for SIMPLE parameter value = <parameter name="pluginNames" value=null>
+		
+		for SINGLE value of MULTI-VALUES parameter	set null for particular value in particular pair. Example:
+												<parameter name="commandSpecificParameters" value="changeUser=null|changeComment=testComment2;
+																								changeUser=testUser3|changeComment=null"/>
+																								
+		for ENTIRE MULTI-VALUES parameter set null for entire set of pairs. Example:
+											<parameter name="commandSpecificParameters" value="changeUser=testUser2|changeComment=testComment2;
+																								null;
+																								null;
+																								changeUser=testUser3|changeComment=testComment3"/>
+-->
+
+	<!-- CREATION OF COMPONENT PROCESS WORKFLOW	 -->
+	<test verbose="1" name="Create Component Process Workflow Test 2nd" annotations="JDK">
+        <parameter name="component" value="createComponentWorkflow-Comp1_{{timestamp}}"/>
+        <parameter name="componentProcess" value="Comp1_ProcessDeploy_{{timestamp}}"/>
+        <parameter name="stepNames" value="add_component_to_application;
+											add_component_to_application2"/>
+        <parameter name="pluginNames" value="DA Application;
+												DA Application"/>
+        <parameter name="commandNames" value="Add Component To Application;
+												Add Component To Application"/>
+		<parameter name="commandSpecificParameters" value="application=application1|component=component1;
+															application=application2|component=component2"/>
+		<parameter name="allowFailure" value="false;
+												false"/>
+        <parameter name="useImpersonation" value="false;
+													false"/>
+        <parameter name="impersonationGroup" value=";"/>
+		<parameter name="impersonationUsername" value=";"/>
+        <parameter name="impersonationPassword" value=";"/>
+        <parameter name="impersonationUseSudo" value=";"/>
+        <parameter name="impersonationUseSsh" value=";"/>
+        <parameter name="workingDir" value="C:\SraWorkarea;
+											C:\SraWorkarea"/> 
+        <parameter name="preconditionScript" value="echo prescript;
+													echo prescript2"/>
+        <parameter name="postProcessingScript" value=";"/>			
+        <classes>
+            <class name="tests.ComponentTest">
+                <methods>
+                    <include name="createComponentProcessWorkflow"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+	<test verbose="1" name="Verify Component Process Workflow Test 2nd" annotations="JDK">
+        <parameter name="component" value="createComponentWorkflow-Comp1_{{timestamp}}"/>
+        <parameter name="componentProcess" value="Comp1_ProcessDeploy_{{timestamp}}"/>
+        <parameter name="stepNames" value="add_component_to_application;
+											add_component_to_application2"/>
+        <parameter name="pluginNames" value="DA Application;
+												DA Application"/>
+        <parameter name="commandNames" value="Add Component To Application;
+												Add Component To Application"/>
+		<parameter name="commandSpecificParameters" value="application=application1|component=component1;
+															application=application2|component=component2"/>
+		<parameter name="allowFailure" value="false;
+												false"/>
+        <parameter name="useImpersonation" value="false;
+												false"/>
+        <parameter name="impersonationUseSudo" value="false;
+														false"/>
+        <parameter name="impersonationUseSsh" value="false;
+														false"/>
+        <parameter name="workingDir" value="C:\SraWorkarea;
+											C:\SraWorkarea"/> 
+        <parameter name="preconditionScript" value="echo prescript;
+													echo prescript2"/>
+
+        <!--<parameter name="postProcessingScript" value="postScript1;postScript1"/>-->
+		<classes>
+            <class name="tests.ComponentTest">
+                <methods>
+                    <include name="assertComponentProcessWorkflow"/>
+                </methods>
+            </class>
+        </classes>
+    </test>	 
+
+		
+
+	<test verbose="1" name="Create Component Process Workflow Test 3rd" annotations="JDK">
+        <parameter name="component" value="createComponentWorkflow-Comp1_{{timestamp}}"/>
+        <parameter name="componentProcess" value="Comp1_ProcessDeploy_{{timestamp}}"/>
+        <parameter name="stepNames" value="upload_artifacts1;download_artifacts2;download_artifacts3"/>
+        <parameter name="pluginNames" value="DA Versioned File Storage;DA Versioned File Storage;DA Versioned File Storage"/>
+        <parameter name="commandNames" value="Upload Artifacts;Download Artifacts;Download Artifacts"/>
+		<parameter name="commandSpecificParameters" value="changeUser=testUser|changeComment=testComment;;"/>
+        <classes>
+            <class name="tests.ComponentTest">
+                <methods>
+                    <include name="createComponentProcessWorkflow"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+	<test verbose="1" name="Verify Component Process Workflow Test 3rd" annotations="JDK">
+        <parameter name="component" value="createComponentWorkflow-Comp1_{{timestamp}}"/>
+        <parameter name="componentProcess" value="Comp1_ProcessDeploy_{{timestamp}}"/>
+        <parameter name="stepNames" value="upload_artifacts1;
+											download_artifacts2;
+											download_artifacts3"/>
+        <parameter name="pluginNames" value="DA Versioned File Storage;
+												DA Versioned File Storage;
+												DA Versioned File Storage"/>
+        <parameter name="commandNames" value="Upload Artifacts;
+												Download Artifacts;
+												Download Artifacts"/>
+		<parameter name="commandSpecificParameters" value="changeUser=testUser|changeComment=testComment;
+															changeUser=null|changeComment=null;
+															null"/>
+        <classes>
+            <class name="tests.ComponentTest">
+                <methods>
+                    <include name="assertComponentProcessWorkflow"/>
+                </methods>
+            </class>
+        </classes>
+    </test>	
+
+	<test verbose="1" name="Create Component Process Workflow Test 4th version" annotations="JDK">
+        <parameter name="component" value="createComponentWorkflow-Comp1_{{timestamp}}"/>
+        <parameter name="componentProcess" value="Comp1_ProcessDeploy_{{timestamp}}"/>
+        <parameter name="stepNames" value="upload_artifacts1;
+											download_artifacts2;
+											download_artifacts3;
+											upload_artifacts4"/>
+        <parameter name="pluginNames" value="DA Versioned File Storage;
+												DA Versioned File Storage;
+												DA Versioned File Storage;
+												DA Versioned File Storage"/>
+        <parameter name="commandNames" value="Upload Artifacts;
+												Download Artifacts;
+												Download Artifacts;
+												Upload Artifacts"/>
+		<parameter name="commandSpecificParameters" value="changeUser=testUser2|changeComment=testComment2;
+															;
+															;
+															changeUser=testUser3|changeComment=testComment3"/>
+        <classes>
+            <class name="tests.ComponentTest">
+                <methods>
+                    <include name="createComponentProcessWorkflow"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+	<test verbose="1" name="Verify Component Process Workflow Test 4th" annotations="JDK">
+        <parameter name="component" value="createComponentWorkflow-Comp1_{{timestamp}}"/>
+        <parameter name="componentProcess" value="Comp1_ProcessDeploy_{{timestamp}}"/>
+        <parameter name="stepNames" value="upload_artifacts1;
+											download_artifacts2;
+											download_artifacts3;
+											upload_artifacts4"/>
+        <parameter name="pluginNames" value="DA Versioned File Storage;
+												DA Versioned File Storage;
+												DA Versioned File Storage;
+												DA Versioned File Storage"/>
+        <parameter name="commandNames" value="Upload Artifacts;
+												Download Artifacts;
+												Download Artifacts;
+												Upload Artifacts"/>
+		<parameter name="commandSpecificParameters" value="changeUser=testUser2|changeComment=testComment2;
+															null;
+															null;
+															changeUser=testUser3|changeComment=testComment3"/>
+        <classes>
+            <class name="tests.ComponentTest">
+                <methods>
+                    <include name="assertComponentProcessWorkflow"/>
+                </methods>
+            </class>
+        </classes>
+    </test>		
+
+  	<test verbose="1" name="Create Component Process Workflow Test 5th version" annotations="JDK">
+        <parameter name="component" value="createComponentWorkflow-Comp1_{{timestamp}}"/>
+        <parameter name="componentProcess" value="Comp1_ProcessDeploy_{{timestamp}}"/>
+        <parameter name="stepNames" value="download_artifacts;
+											download_artifacts2;
+											download_artifacts3;
+											download_artifacts4;
+											download_artifacts5"/>
+        <parameter name="pluginNames" value="DA Versioned File Storage;
+												DA Versioned File Storage;
+												DA Versioned File Storage;
+												DA Versioned File Storage;
+												DA Versioned File Storage"/>
+        <parameter name="commandNames" value="Download Artifacts;
+												Download Artifacts;
+												Download Artifacts;
+												Download Artifacts;
+												Download Artifacts"/>
+		<parameter name="allowFailure" value="true;
+												false;
+												true;
+												false;
+												true"/>
+        <parameter name="useImpersonation" value="true;
+													true;
+													true;
+													true;
+													false"/>
+        <parameter name="impersonationGroup" value="Admin;
+													Admin;
+													Admin;
+													Admin;
+													Admin"/>
+		<parameter name="impersonationUsername" value="admin;
+														admin;
+														admin;
+														admin;
+														admin"/>
+        <parameter name="impersonationPassword" value="adminpass1;
+														adminpass2;
+														adminpass3;
+														adminpass4;
+														adminpass5"/>
+        <parameter name="impersonationUseSudo" value="false;
+														true;
+														true;
+														false;
+														true"/>
+        <parameter name="impersonationUseSsh" value="true;
+													false;
+													true;
+													false;
+													true"/>
+        <parameter name="workingDir" value="C:\SraWorkarea;
+											C:\SraWorkarea;
+											C:\SraWorkarea;
+											C:\SraWorkarea;
+											C:\SraWorkarea"/>
+        <parameter name="preconditionScript" value="echo 'prescript';
+														echo 'prescript';
+														echo 'prescript';
+														echo 'prescript';
+														echo 'prescript'"/>											
+	
+        <!--<parameter name="postProcessingScript" value=""/>-->
+		<classes>
+            <class name="tests.ComponentTest">
+                <methods>
+                    <include name="createComponentProcessWorkflow"/>
+                </methods>
+            </class>
+        </classes>
+    </test>	
+
+				
+
+			
+	<test verbose="1" name="Verify Component Process Workflow Test 5th version" annotations="JDK">
+        <parameter name="component" value="createComponentWorkflow-Comp1_{{timestamp}}"/>
+        <parameter name="componentProcess" value="Comp1_ProcessDeploy_{{timestamp}}"/>
+        <parameter name="stepNames" value="download_artifacts;
+											download_artifacts2;
+											download_artifacts3;
+											download_artifacts4;
+											download_artifacts5"/>
+        <parameter name="pluginNames" value="DA Versioned File Storage;
+												DA Versioned File Storage;
+												DA Versioned File Storage;
+												DA Versioned File Storage;
+												DA Versioned File Storage"/>
+        <parameter name="commandNames" value="Download Artifacts;
+												Download Artifacts;
+												Download Artifacts;
+												Download Artifacts;
+												Download Artifacts"/>
+		<parameter name="allowFailure" value="true;
+												false;
+												true;
+												false;
+												true"/>
+        <parameter name="useImpersonation" value="true;
+													true;
+													true;
+													true;
+													false"/>
+        <parameter name="impersonationGroup" value="null;
+													Admin;
+													Admin;
+													;
+													null"/>
+		<parameter name="impersonationUsername" value="admin;
+														admin;
+														admin;
+														admin;
+														null"/>
+        <parameter name="impersonationUseSudo" value="false;
+														true;
+														true;
+														false;
+														false"/>
+        <parameter name="impersonationUseSsh" value="true;
+													false;
+													true;
+													false;
+													false"/>
+        <parameter name="workingDir" value="C:\SraWorkarea;
+											C:\SraWorkarea;
+											C:\SraWorkarea;
+											C:\SraWorkarea;
+											C:\SraWorkarea"/>
+        <parameter name="preconditionScript" value="echo 'prescript';
+														echo 'prescript';
+														echo 'prescript';
+														echo 'prescript';
+														echo 'prescript'"/>
+		<parameter name="postProcessingScript" value="null"/>
+
+        <classes>
+            <class name="tests.ComponentTest">
+                <methods>
+                    <include name="assertComponentProcessWorkflow"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+	
+	
+	<test verbose="1" name="Create Component Process Workflow Test 6th version" annotations="JDK">
+        <parameter name="component" value="createComponentWorkflow-Comp1_{{timestamp}}"/>
+        <parameter name="componentProcess" value="Comp1_ProcessDeploy_{{timestamp}}"/>
+        <parameter name="stepNames" value="upload_artifacts1;
+												download_artifacts2;
+												download_artifacts3;
+												upload_artifacts4"/>
+        <parameter name="pluginNames" value="DA Versioned File Storage;
+												DA Versioned File Storage;
+												DA Versioned File Storage;
+												DA Versioned File Storage"/>
+        <parameter name="commandNames" value="Upload Artifacts;
+												Download Artifacts;
+												Download Artifacts;
+												Upload Artifacts"/>
+		<parameter name="commandSpecificParameters" value="changeUser=testUser4|changeComment=testComment4;
+															;
+															;
+															changeUser=testUser5|changeComment=testComment5"
+															/>
+		<parameter name="allowFailure" value="false;
+													true;
+													true;
+													false"/>
+        <parameter name="useImpersonation" value="false;
+													false;
+													true;
+													true"/>
+        <parameter name="impersonationGroup" value=";
+													;
+													Admin;
+													Admin"/>
+		<parameter name="impersonationUsername" value=";
+														;
+														admin;
+														admin"/>
+        <parameter name="impersonationPassword" value=";
+														;
+														password;
+														password"/>
+        <parameter name="impersonationUseSudo" value=";
+													;
+													false;
+													false"/>
+        <parameter name="impersonationUseSsh" value=";
+													;
+													true;
+													true"/>
+        <parameter name="workingDir" value="C:\SraWorkarea;
+											C:\SraWorkarea;
+											C:\SraWorkarea;
+											C:\SraWorkarea"/> 
+        <parameter name="preconditionScript" value="echo prescript;
+													echo prescript;
+													echo prescript;
+													echo prescript"/>
+        <parameter name="postProcessingScript" value=""/>	
+        <classes>
+            <class name="tests.ComponentTest">
+                <methods>
+                    <include name="createComponentProcessWorkflow"/>
+                </methods>
+            </class>
+        </classes>
+    </test>	
+
+	<test verbose="1" name="Verify Component Process Workflow Test 6th version" annotations="JDK">
+        <parameter name="component" value="createComponentWorkflow-Comp1_{{timestamp}}"/>
+        <parameter name="componentProcess" value="Comp1_ProcessDeploy_{{timestamp}}"/>
+        <parameter name="stepNames" value="upload_artifacts1;
+												download_artifacts2;
+												download_artifacts3;
+												upload_artifacts4"/>
+        <parameter name="pluginNames" value="DA Versioned File Storage;
+												DA Versioned File Storage;
+												DA Versioned File Storage;
+												DA Versioned File Storage"/>
+        <parameter name="commandNames" value="Upload Artifacts;
+												Download Artifacts;
+												Download Artifacts;
+												Upload Artifacts"/>
+		<parameter name="commandSpecificParameters" value="changeUser=testUser4|changeComment=testComment4;
+															null;
+															null;
+															changeUser=testUser5|changeComment=testComment5"
+															/>
+		<parameter name="allowFailure" value="false;
+												true;
+												true;
+												false"/>
+        <parameter name="useImpersonation" value="false;
+													false;
+													true;
+													true"/>
+        <parameter name="impersonationGroup" value="null;
+													null;
+													;
+													"/>
+		<parameter name="impersonationUsername" value="null;
+														null;
+														admin;
+														admin"/>
+        <parameter name="impersonationPassword" value="null;
+														null;
+														password;
+														password"/>
+        <parameter name="impersonationUseSudo" value="null;
+													null;
+													false;
+													false"/>
+        <parameter name="impersonationUseSsh" value="null;
+													null;
+													true;
+													true"/>
+        <parameter name="workingDir" value="C:\SraWorkarea;
+											C:\SraWorkarea;
+											C:\SraWorkarea;
+											C:\SraWorkarea"/> 
+        <parameter name="preconditionScript" value="echo prescript;
+													echo prescript;
+													echo prescript;
+													echo prescript"/>
+        <parameter name="postProcessingScript" value="null;null;null;null"/>	
+        <classes>
+            <class name="tests.ComponentTest">
+                <methods>
+                    <include name="assertComponentProcessWorkflow"/>
+                </methods>
+            </class>
+        </classes>
+    </test>	
+
+	<test verbose="1" name="Create Component Process Workflow Test 7th version" annotations="JDK">
+        <parameter name="component" value="createComponentWorkflow-Comp1_{{timestamp}}"/>
+        <parameter name="componentProcess" value="Comp1_ProcessDeploy_{{timestamp}}"/>
+        <parameter name="stepNames" value="download_artifacts"/>
+        <parameter name="pluginNames" value="DA Versioned File Storage"/>
+        <parameter name="commandNames" value="Download Artifacts"/>
+		<parameter name="allowFailure" value="true"/>
+        <parameter name="useImpersonation" value="true"/>
+        <parameter name="impersonationGroup" value="Admin"/>
+		<parameter name="impersonationUsername" value="admin"/>
+        <parameter name="impersonationPassword" value=""/>
+        <parameter name="impersonationUseSudo" value="true"/>
+        <parameter name="impersonationUseSsh" value="false"/>
+        <parameter name="workingDir" value="C:\SraWorkarea"/>
+        <parameter name="preconditionScript" value="echo 'prescript'"/>
+        <classes>
+            <class name="tests.ComponentTest">
+                <methods>
+                    <include name="createComponentProcessWorkflow"/>
+                </methods>
+            </class>
+        </classes>
+    </test>	
+
+	<test verbose="1" name="Verify Component Process Workflow Test 7th version" annotations="JDK">
+        <parameter name="component" value="createComponentWorkflow-Comp1_{{timestamp}}"/>
+        <parameter name="componentProcess" value="Comp1_ProcessDeploy_{{timestamp}}"/>
+        <parameter name="stepNames" value="download_artifacts"/>
+        <parameter name="pluginNames" value="DA Versioned File Storage"/>
+        <parameter name="commandNames" value="Download Artifacts"/>
+		<parameter name="allowFailure" value="true"/>
+        <parameter name="useImpersonation" value="true"/>
+        <parameter name="impersonationGroup" value="Admin"/>
+		<parameter name="impersonationUsername" value="admin"/>
+        <parameter name="impersonationUseSudo" value="true"/>
+        <parameter name="impersonationUseSsh" value="false"/>
+        <parameter name="workingDir" value="C:\SraWorkarea"/>
+        <parameter name="preconditionScript" value="echo 'prescript'"/>
+        <classes>
+            <class name="tests.ComponentTest">
+                <methods>
+                    <include name="assertComponentProcessWorkflow"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+	
+		<test verbose="1" name="Create Component Process Workflow Test 8th version" annotations="JDK">
+        <parameter name="component" value="createComponentWorkflow-Comp1_{{timestamp}}"/>
+        <parameter name="componentProcess" value="Comp1_ProcessDeploy_{{timestamp}}"/>
+        <parameter name="stepNames" value="download_artifacts"/>
+        <parameter name="pluginNames" value="DA Versioned File Storage"/>
+        <parameter name="commandNames" value="Download Artifacts"/>
+        <classes>
+            <class name="tests.ComponentTest">
+                <methods>
+                    <include name="createComponentProcessWorkflow"/>
+                </methods>
+            </class>
+        </classes>
+    </test>	
+
+	<test verbose="1" name="Verify Component Process Workflow Test 8th version" annotations="JDK">
+        <parameter name="component" value="createComponentWorkflow-Comp1_{{timestamp}}"/>
+        <parameter name="componentProcess" value="Comp1_ProcessDeploy_{{timestamp}}"/>
+        <parameter name="stepNames" value="download_artifacts"/>
+        <parameter name="pluginNames" value="DA Versioned File Storage"/>
+        <parameter name="commandNames" value="Download Artifacts"/>
+        <classes>
+            <class name="tests.ComponentTest">
+                <methods>
+                    <include name="assertComponentProcessWorkflow"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+</suite>

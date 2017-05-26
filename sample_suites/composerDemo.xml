@@ -1,0 +1,588 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+
+<suite name="RunApplicationProcessSmokeSuite" verbose="10" parallel="false" annotations="JDK">
+
+	<!-- SIMPLE COMPONENT CREATION -->
+    <test name="Create Global Environment">
+        <parameter name="name" value="runApp_GlobalEnv1_{{timestamp}}"/>
+        <parameter name="description" value="SDA Automation"/>
+        <parameter name="color" value="#8f0c4b"/>
+        <classes>
+            <class name="tests.GlobalEnvironmentTest">
+                <methods>
+                    <include name="createGlobalEnv"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+	  <test name="Validate Global Environment">
+        <parameter name="name" value="runApp_GlobalEnv1_{{timestamp}}"/>
+        <parameter name="description" value="SDA Automation"/>
+        <parameter name="color" value="#8f0c4b"/>
+        <parameter name="active" value="true"/>
+        <classes>
+            <class name="tests.GlobalEnvironmentTest">
+                <methods>
+                    <include name="assertGlobalEnvironmentCreated"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+	<!-- ADD RESOURCE TO GLOBAL ENVIRONMENT -->
+    <test name="Add Resource to Global Environment">
+        <parameter name="globalEnvironmentName" value="runApp_GlobalEnv1_{{timestamp}}"/>
+        <classes>
+            <class name="tests.GlobalEnvironmentTest">
+                <methods>
+                    <include name="addResourcesToGlobalEnvironment"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Validate Resource added to Global Environment">
+        <parameter name="globalEnvironmentName" value="runApp_GlobalEnv1_{{timestamp}}"/>
+        <classes>
+            <class name="tests.GlobalEnvironmentTest">
+                <methods>
+                    <include name="assertResourcesAddedToGlobalEnvironment"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+
+	<!-- SIMPLE COMPONENT CREATION -->
+    <test name="Create Component (File System Basic)">
+        <parameter name="name" value="runApp_Component1_{{timestamp}}"/>
+        <parameter name="description" value="SDA Automation"/>
+        <classes>
+            <class name="tests.ComponentTest">
+                <methods>
+                    <include name="createFileSystemBasicComponent"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+	<test name="Assert Component (File System Basic)">
+        <parameter name="name" value="runApp_Component1_{{timestamp}}"/>
+		<parameter name="description" value="SDA Automation"/>
+		<parameter name="active" value="true"/>
+        <parameter name="useVersionNamePattern" value="false"/>
+        <parameter name="versionNamePattern" value="${version}"/>
+		<parameter name="defaultVersionType" value="full"/>
+		<parameter name="useVfs" value="true"/>
+		<parameter name="importAutomatically" value="false"/>	
+        <parameter name="nextVersionNumber" value="1"/>
+        <parameter name="saveFileExecuteBits" value="false"/>		
+        <classes>
+            <class name="tests.ComponentTest">
+                <methods>
+                    <include name="assertComponentFileSystemBasic"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+
+	<!-- CRATE COMPONENT PROCESS  (Deployment type) -->
+	<test verbose="1" name="Create Component Process (Deploy-type)" annotations="JDK">
+        <parameter name="component" value="runApp_Component1_{{timestamp}}"/>
+        <parameter name="name" value="runApp_ComponentTest1_ProcessDeploy1_{{timestamp}}"/>
+        <parameter name="processType" value="Deployment"/>
+		<parameter name="defaultWorkingDir" value="${p:resource/work.dir}/${p:component.name}"/>
+        <classes>
+            <class name="tests.ComponentTest">
+                <methods>
+                    <include name="createComponentProcess"/>
+                </methods>
+            </class>
+        </classes>
+    </test>	
+
+		<test verbose="1" name="Assert Component Process (Deploy-type)" annotations="JDK">
+        <parameter name="component" value="runApp_Component1_{{timestamp}}"/>
+        <parameter name="name" value="runApp_ComponentTest1_ProcessDeploy1_{{timestamp}}"/>
+        <parameter name="processType" value="Deployment"/>
+		<parameter name="defaultWorkingDir" value="${p:resource/work.dir}/${p:component.name}"/>
+		<parameter name="versionCount" value="1"/>
+        <classes>
+            <class name="tests.ComponentTest">
+                <methods>
+                    <include name="assertComponentProcess"/>
+                </methods>
+            </class>
+        </classes>
+    </test>  
+
+	<!-- CREATION OF COMPONENT PROCESS WORKFLOW	 -->
+
+	<test verbose="1" name="Create Component Process Workflow Test 2nd" annotations="JDK">
+        <parameter name="component" value="runApp_Component1_{{timestamp}}"/>
+        <parameter name="componentProcess" value="runApp_ComponentTest1_ProcessDeploy1_{{timestamp}}"/>
+        <parameter name="stepNames" value="download_artifacts1;download_artifacts2"/>
+        <parameter name="pluginNames" value="Serena DA Versioned File Storage;Serena DA Versioned File Storage"/>
+        <parameter name="commandNames" value="Download Artifacts;Download Artifacts"/>
+        <classes>
+            <class name="tests.ComponentTest">
+                <methods>
+                    <include name="createComponentProcessWorkflow"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+	<test verbose="1" name="Verify Component Process Workflow Test 2nd" annotations="JDK">
+        <parameter name="component" value="runApp_Component1_{{timestamp}}"/>
+        <parameter name="componentProcess" value="runApp_ComponentTest1_ProcessDeploy1_{{timestamp}}"/>
+        <parameter name="stepNames" value="download_artifacts1;
+											download_artifacts2"/>
+        <parameter name="pluginNames" value="Serena DA Versioned File Storage;
+												Serena DA Versioned File Storage"/>
+        <parameter name="commandNames" value="Download Artifacts;
+												Download Artifacts"/>
+
+        <classes>
+            <class name="tests.ComponentTest">
+                <methods>
+                    <include name="assertComponentProcessWorkflow"/>
+                </methods>
+            </class>
+        </classes>
+    </test>	
+
+	<!-- IMPORT COMPONENT VERSION -->
+    <test name="Import Component Version">
+        <parameter name="componentName" value="runApp_Component1_{{timestamp}}"/>
+        <classes>
+            <class name="tests.ComponentTest">
+                <methods>
+                    <include name="importVersionFileSystemBasic"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Validate component has imported version">
+        <parameter name="componentName" value="runApp_Component1_{{timestamp}}"/>
+        <parameter name="creator" value="null"/>
+        <parameter name="type" value="FULL"/>
+        <parameter name="active" value="true"/>
+        <parameter name="archived" value="false"/>
+        <classes>
+            <class name="tests.ComponentTest">
+                <methods>
+                    <include name="assertVersionImported"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+
+	<!-- SIMPLE COMPONENT #2 CREATION -->
+    <test name="Create Component (File System Basic) 2nd">
+        <parameter name="name" value="runApp_Component2_{{timestamp}}"/>
+        <parameter name="description" value="SDA Automation"/>
+        <classes>
+            <class name="tests.ComponentTest">
+                <methods>
+                    <include name="createFileSystemBasicComponent"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+	<test name="Assert Component (File System Basic) 2nd">
+        <parameter name="name" value="runApp_Component2_{{timestamp}}"/>
+		<parameter name="description" value="SDA Automation"/>
+		<parameter name="active" value="true"/>
+        <parameter name="useVersionNamePattern" value="false"/>
+        <parameter name="versionNamePattern" value="${version}"/>
+		<parameter name="defaultVersionType" value="full"/>
+		<parameter name="useVfs" value="true"/>
+		<parameter name="importAutomatically" value="false"/>	
+        <parameter name="nextVersionNumber" value="1"/>
+        <parameter name="saveFileExecuteBits" value="false"/>		
+        <classes>
+            <class name="tests.ComponentTest">
+                <methods>
+                    <include name="assertComponentFileSystemBasic"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+
+	<!-- CRATE COMPONENT PROCESS  (Deployment type) -->
+	<test verbose="1" name="Create Component Process (Deploy-type) 2nd" annotations="JDK">
+        <parameter name="component" value="runApp_Component2_{{timestamp}}"/>
+        <parameter name="name" value="runApp_ComponentTest2_ProcessDeploy1_{{timestamp}}"/>
+        <parameter name="processType" value="Deployment"/>
+		<parameter name="defaultWorkingDir" value="${p:resource/work.dir}/${p:component.name}"/>
+        <classes>
+            <class name="tests.ComponentTest">
+                <methods>
+                    <include name="createComponentProcess"/>
+                </methods>
+            </class>
+        </classes>
+    </test>	
+
+		<test verbose="1" name="Assert Component Process (Deploy-type) 2nd" annotations="JDK">
+        <parameter name="component" value="runApp_Component2_{{timestamp}}"/>
+        <parameter name="name" value="runApp_ComponentTest2_ProcessDeploy1_{{timestamp}}"/>
+        <parameter name="processType" value="Deployment"/>
+		<parameter name="defaultWorkingDir" value="${p:resource/work.dir}/${p:component.name}"/>
+		<parameter name="versionCount" value="1"/>
+        <classes>
+            <class name="tests.ComponentTest">
+                <methods>
+                    <include name="assertComponentProcess"/>
+                </methods>
+            </class>
+        </classes>
+    </test>  
+
+	<!-- CREATION OF COMPONENT PROCESS WORKFLOW	 -->
+
+	<test verbose="1" name="Create Component Process Workflow Test 2nd  ( 2nd)" annotations="JDK">
+        <parameter name="component" value="runApp_Component2_{{timestamp}}"/>
+        <parameter name="componentProcess" value="runApp_ComponentTest2_ProcessDeploy1_{{timestamp}}"/>
+        <parameter name="stepNames" value="download_artifacts1;download_artifacts2"/>
+        <parameter name="pluginNames" value="Serena DA Versioned File Storage;Serena DA Versioned File Storage"/>
+        <parameter name="commandNames" value="Download Artifacts;Download Artifacts"/>
+        <classes>
+            <class name="tests.ComponentTest">
+                <methods>
+                    <include name="createComponentProcessWorkflow"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+	<test verbose="1" name="Verify Component Process Workflow Test 2nd ( 2nd)" annotations="JDK">
+        <parameter name="component" value="runApp_Component2_{{timestamp}}"/>
+        <parameter name="componentProcess" value="runApp_ComponentTest2_ProcessDeploy1_{{timestamp}}"/>
+        <parameter name="stepNames" value="download_artifacts1;
+											download_artifacts2"/>
+        <parameter name="pluginNames" value="Serena DA Versioned File Storage;
+												Serena DA Versioned File Storage"/>
+        <parameter name="commandNames" value="Download Artifacts;
+												Download Artifacts"/>
+
+        <classes>
+            <class name="tests.ComponentTest">
+                <methods>
+                    <include name="assertComponentProcessWorkflow"/>
+                </methods>
+            </class>
+        </classes>
+    </test>	
+
+	<!-- IMPORT COMPONENT VERSION -->
+    <test name="Import Component Version  2nd">
+        <parameter name="componentName" value="runApp_Component2_{{timestamp}}"/>
+        <classes>
+            <class name="tests.ComponentTest">
+                <methods>
+                    <include name="importVersionFileSystemBasic"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Validate component has imported version 2nd">
+        <parameter name="componentName" value="runApp_Component2_{{timestamp}}"/>
+        <parameter name="creator" value="null"/>
+        <parameter name="type" value="FULL"/>
+        <parameter name="active" value="true"/>
+        <parameter name="archived" value="false"/>
+        <classes>
+            <class name="tests.ComponentTest">
+                <methods>
+                    <include name="assertVersionImported"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+	
+	<!-- CREATE PIPELINE -->
+    <test name="Create Pipeline">
+        <parameter name="name" value="runApp_Pipeline1_{{timestamp}}"/>
+        <parameter name="description" value="SDA Automation"/>
+        <classes>
+            <class name="tests.PipelineTest">
+                <methods>
+                    <include name="createPipeline"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+	<!-- CREATE APPLICATION -->
+    <test name="Create Application 1">
+        <parameter name="name" value="runApp_Application1_{{timestamp}}"/>
+        <parameter name="description" value="SDA Automation"/>
+        <parameter name="pipeline" value="runApp_Pipeline1_{{timestamp}}"/>
+        <parameter name="notificationScheme" value="Default Notification Scheme"/>
+        <parameter name="enforceCompleteSnapshots" value="true"/>
+        <classes>
+            <class name="tests.ApplicationTest">
+                <methods>
+                    <include name="createApplication"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Validate Application 1">
+        <parameter name="name" value="runApp_Application1_{{timestamp}}"/>
+        <parameter name="description" value="SDA Automation"/>
+        <parameter name="pipeline" value="runApp_Pipeline1_{{timestamp}}"/>
+        <parameter name="notificationScheme" value="Default Notification Scheme"/>
+        <parameter name="enforceCompleteSnapshots" value="true"/>
+        <parameter name="active" value="true"/>
+        <classes>
+            <class name="tests.ApplicationTest">
+                <methods>
+                    <include name="assertApplicationCreated"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+	
+	<!-- ADD COMPONENTS TO APPLICATION -->
+    <test name="Add Component to Application">
+        <parameter name="applicationName" value="runApp_Application1_{{timestamp}}"/>
+        <parameter name="componentNames" value="runApp_Component1_{{timestamp}}"/>
+        <classes>
+            <class name="tests.ApplicationTest">
+                <methods>
+                    <include name="addComponentsToApplication"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+	
+		<test name="Add Component to Application 2nd">
+        <parameter name="applicationName" value="runApp_Application1_{{timestamp}}"/>
+        <parameter name="componentNames" value="runApp_Component2_{{timestamp}}"/>
+        <classes>
+            <class name="tests.ApplicationTest">
+                <methods>
+                    <include name="addComponentsToApplication"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Validate Components added to Application">
+        <parameter name="applicationName" value="runApp_Application1_{{timestamp}}"/>
+        <parameter name="componentNames" value="runApp_Component1_{{timestamp}};runApp_Component2_{{timestamp}}"/>
+        <parameter name="itemsCount" value="2"/>
+        <classes>
+            <class name="tests.ApplicationTest">
+                <methods>
+                    <include name="assertComponentsAddedToApplication"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+	
+	<!-- ADD GLOBAL ENVIORNMENT TO APPLICATION -->
+	<test name="Add Environment 1 to Application">
+        <parameter name="appName" value="runApp_Application1_{{timestamp}}"/>
+        <parameter name="envName" value="runApp_GlobalEnv1_{{timestamp}}"/>
+        <classes>
+            <class name="tests.EnvironmentTest">
+                <methods>
+                    <include name="addEnvironmentToApplication"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Validate Environment 1 added to Application">
+        <parameter name="appName" value="runApp_Application1_{{timestamp}}"/>
+        <parameter name="environments" value="runApp_GlobalEnv1_{{timestamp}}"/>
+        <parameter name="itemsCount" value="1"/>
+        <classes>
+            <class name="tests.EnvironmentTest">
+                <methods>
+                    <include name="assertEnvironmentsAddedToApplication"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+	<!-- MAP RESOURCE TO COMPONENT -->
+	    <test name="Map Resource to Component">
+        <parameter name="applicationName" value="runApp_Application1_{{timestamp}}"/>
+        <parameter name="environmentName" value="runApp_GlobalEnv1_{{timestamp}}"/>
+        <parameter name="componentName" value="runApp_Component1_{{timestamp}}"/>
+        <classes>
+            <class name="tests.ComponentTest">
+                <methods>
+                    <include name="mapComponentToResources"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Validate Resource mapped to Component">
+        <parameter name="applicationName" value="runApp_Application1_{{timestamp}}"/>
+        <parameter name="environmentName" value="runApp_GlobalEnv1_{{timestamp}}"/>
+        <parameter name="componentName" value="runApp_Component1_{{timestamp}}"/>
+        <classes>
+            <class name="tests.ComponentTest">
+                <methods>
+                    <include name="assertResourcesMappedToComponent"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+	<test name="Map Resource to Component 2nd">
+        <parameter name="applicationName" value="runApp_Application1_{{timestamp}}"/>
+        <parameter name="environmentName" value="runApp_GlobalEnv1_{{timestamp}}"/>
+        <parameter name="componentName" value="runApp_Component2_{{timestamp}}"/>
+        <classes>
+            <class name="tests.ComponentTest">
+                <methods>
+                    <include name="mapComponentToResources"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Validate Resource mapped to Component 2nd">
+        <parameter name="applicationName" value="runApp_Application1_{{timestamp}}"/>
+        <parameter name="environmentName" value="runApp_GlobalEnv1_{{timestamp}}"/>
+        <parameter name="componentName" value="runApp_Component2_{{timestamp}}"/>
+        <classes>
+            <class name="tests.ComponentTest">
+                <methods>
+                    <include name="assertResourcesMappedToComponent"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+	
+	<!-- CREATE APPLICATION PROCESS -->
+   <test name="Create Application Process 1">
+        <parameter name="name" value="runApp_Application1_Process1_{{timestamp}}"/>
+        <parameter name="applicationName" value="runApp_Application1_{{timestamp}}"/>
+        <classes>
+            <class name="tests.ApplicationTest">
+                <methods>
+                    <include name="createApplicationProcess"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Assert Application Process 1 created">
+        <parameter name="name" value="runApp_Application1_Process1_{{timestamp}}"/>
+        <parameter name="applicationName" value="runApp_Application1_{{timestamp}}"/>
+        <classes>
+            <class name="tests.ApplicationTest">
+                <methods>
+                    <include name="assertApplicationProcessCreated"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+	
+    <test name="Create Application Process Workflow (Install Component Process)">
+        <parameter name="applicationName" value="runApp_Application1_{{timestamp}}"/>
+        <parameter name="applicationProcessName" value="runApp_Application1_Process1_{{timestamp}}"/>
+        <parameter name="stepNames" value="Deployment Component Process1;Deployment Component Process2"/>
+        <parameter name="stepTypes" value="InstallComponentProcess;InstallComponentProcess"/>
+        <parameter name="componentNames" value="runApp_Component1_{{timestamp}};runApp_Component2_{{timestamp}}"/>
+        <parameter name="componentProcessNames" value="runApp_ComponentTest1_ProcessDeploy1_{{timestamp}};runApp_ComponentTest2_ProcessDeploy1_{{timestamp}}"/>
+        <parameter name="RunIfComponentsChange" value="{{NULL}};{{NULL}}"/>
+        <parameter name="IgnoreFailure" value="false;false"/>
+        <parameter name="MaxNumberOfConcurrentJobs" value="-1;-1"/>
+        <parameter name="FailFast" value="false;false"/>
+        <parameter name="RunOnFirstOnlineResourceOnly" value="false;false"/>
+        <parameter name="Precondition" value=";"/>
+        <parameter name="UseVersionsWithoutStatus" value="Active;Active"/>
+        <classes>
+            <class name="tests.ApplicationTest">
+                <methods>
+                    <include name="createApplicationProcessWorkflow"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Assert Application Process Workflow created (Install Component Process)">
+        <parameter name="applicationName" value="runApp_Application1_{{timestamp}}"/>
+        <parameter name="applicationProcessName" value="runApp_Application1_Process1_{{timestamp}}"/>
+        <parameter name="stepNames" value="Deployment Component Process1;Deployment Component Process2"/>
+        <parameter name="stepTypes" value="InstallComponentProcess;InstallComponentProcess"/>
+        <parameter name="componentNames" value="runApp_Component1_{{timestamp}};runApp_Component2_{{timestamp}}"/>
+        <parameter name="componentProcessNames" value="runApp_ComponentTest1_ProcessDeploy1_{{timestamp}};runApp_ComponentTest2_ProcessDeploy1_{{timestamp}}"/>
+        <parameter name="UseVersionsWithoutStatus" value="Active;Active"/>
+        <classes>
+            <class name="tests.ApplicationTest">
+                <methods>
+                    <include name="assertApplicationProcessWorkflowCreated"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+	
+	<!-- RUN APPLICATION PROCESS
+	<test name="Run Application Process">
+		<parameter name="requestName" value="startedRun_{{timestamp}}"/>		
+        <parameter name="environment" value="runApp_GlobalEnv1_{{timestamp}}"/>
+        <parameter name="application" value="runApp_Application1_{{timestamp}}"/>
+        <parameter name="applicationProcess" value="runApp_Application1_Process1_{{timestamp}}"/>
+		<parameter name="onlyChanged" value="false"/>
+		<parameter name="componentVersions" value="runApp_Component1_{{timestamp}}=LatestVersion;
+												   runApp_Component2_{{timestamp}}=SpecificVersion|1"/>
+		<parameter name="properties" value="Deployment Component Process1/comp1_proc1_param1=c1p1pr1;
+											Deployment Component Process1/comp1_proc1_param2=c1p1pr2;
+											Deployment Component Process2/comp2_proc1_param1=c2p1pr1;
+											Deployment Component Process2/comp2_proc1_param2=c2p1pr2
+											"/>
+        <classes>
+            <class name="tests.ApplicationTest">
+                <methods>
+                    <include name="runApplicationProcess"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+	
+	<test name="Assert Application Process Run">
+		<parameter name="requestName" value="startedRun_{{timestamp}}"/>		
+        <parameter name="environment" value="runApp_GlobalEnv1_{{timestamp}}"/>
+        <parameter name="application" value="runApp_Application1_{{timestamp}}"/>
+        <parameter name="applicationProcess" value="runApp_Application1_Process1_{{timestamp}}"/>
+		<parameter name="waitSeconds" value="90"/>
+		<parameter name="executionResult" value="SUCCEEDED"/>
+		<parameter name="user" value="admin"/>
+		<parameter name="onlyChanged" value="false"/>
+		<parameter name="properties" value="Deployment Component Process1/comp1_proc1_param1=c1p1pr1;
+											Deployment Component Process1/comp1_proc1_param2=c1p1pr2;
+											Deployment Component Process2/comp2_proc1_param1=c2p1pr1;
+											Deployment Component Process2/comp2_proc1_param2=c2p1pr2
+											"/>
+        <classes>
+            <class name="tests.ApplicationTest">
+                <methods>
+                    <include name="assertApplicationProcessRequest"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+-->
+
+</suite>
